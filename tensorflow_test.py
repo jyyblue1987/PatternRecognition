@@ -34,18 +34,20 @@ from util import *
 # Load Train / Test Data
 # df = pd.read_csv(r'D_train_large.csv')
 # train_data = df.to_numpy()
-
-# X_Train = train_data[1:, 3:39]
+#
+# X_Train = train_data[1:, 2:39]
 # Y_Train = train_data[1:, [1]]
 # Y_Train = Y_Train.ravel()
+# Y_Train = Y_Train - 1
 #
 # df = pd.read_csv(r'D_test.csv')
 #
 # test_data = df.to_numpy()
 #
-# X_Test = test_data[1:, 3:39]
+# X_Test = test_data[1:, 2:39]
 # Y_Test = test_data[1:, [1]]
 # Y_Test = Y_Test.ravel()
+# Y_Test = Y_Test - 1
 
 df = pd.read_csv(r'D_Train1.csv')
 train_data = df.to_numpy()
@@ -73,9 +75,9 @@ dim = len(X_Train[0])
 label_count = len(train_labels[0])
 
 network1 = models.Sequential()
-network1.add(layers.Dense(8, activation='relu', input_shape=(dim,)))
-network1.add(layers.Dense(16, activation='relu'))
-network1.add(layers.Dense(32, activation='relu'))
+network1.add(layers.Dense(32, activation='relu', input_shape=(dim,)))
+# network1.add(layers.Dense(16, activation='relu'))
+# network1.add(layers.Dense(32, activation='relu'))
 network1.add(layers.Dense(label_count, activation='softmax'))
 
 network1.compile(optimizer='rmsprop',
