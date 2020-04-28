@@ -13,11 +13,6 @@ Y_Train = Y_Train.ravel()
 clf = svm.SVC(decision_function_shape='ovr')
 clf.fit(X_Train, Y_Train)
 
-# dec = clf.decision_function([[1]])
-# print(dec.shape[1])
-
-print(clf.predict([[-58,-58,-61,-59,-69,-81,-80]]))
-
 df = pd.read_csv(r'D_Test1.csv')
 
 test_data = df.to_numpy()
@@ -27,5 +22,15 @@ Y_Test = test_data[1:, [0]]
 Y_Test = Y_Test.ravel()
 
 predict = clf.predict(X_Test)
+
 print(predict)
 print(Y_Test)
+
+zip_object = zip(predict, Y_Test)
+error_count = 0
+for i, j in zip_object:
+    if i != j:
+        error_count += 1
+
+print("Test Count = ", len(Y_Test), "  Count = ", error_count)
+
