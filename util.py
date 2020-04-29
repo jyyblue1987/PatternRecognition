@@ -16,3 +16,10 @@ def train_evaluate_classfier(name, clf, x_train, y_train, x_test, y_test):
     print("")
 
     return score
+
+def to_percent(y, position):
+  s = str(y / 100)
+  if rcParams['text.usetex'] is True:
+    return s + r'$\%$'
+  else:
+    return s + '%'

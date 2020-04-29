@@ -8,7 +8,7 @@ from sklearn.decomposition import PCA
 
 import numpy as np
 import matplotlib.pyplot as plt
-
+import matplotlib.ticker as mtick
 
 # Load the Pandas libraries with alias 'pd'
 import pandas as pd
@@ -51,7 +51,8 @@ for name, clf in zip(names, classifiers):
     score_list.append(score * 100)
 
 x_pos = np.arange(len(names));
-ax = plt.bar(x_pos, score_list, align='center', alpha=0.5)
+plt.bar(x_pos, score_list, align='center', alpha=0.5)
+plt.gca().yaxis.set_major_formatter(mtick.PercentFormatter())
 plt.xticks(x_pos, names)
 plt.ylabel('Accuracy')
 plt.title('Classifiers Performance')
@@ -73,8 +74,10 @@ for pca_dim in range(2, f_dim):
     score = train_evaluate_classfier("SVM: PCA Dim = " + str(pca_dim), clf, X_Train_Transform, Y_Train, X_Test_Transform, Y_Test)
     score_list.append(score * 100)
 
-x_pos = np.arange(len(score_list));
-ax = plt.bar(x_pos, score_list, align='center', alpha=0.5)
+x_pos = np.arange(len(score_list))
+plt.bar(x_pos, score_list, align='center', alpha=0.5)
+plt.gca().yaxis.set_major_formatter(mtick.PercentFormatter())
 plt.ylabel('Accuracy')
 plt.title('PCA Dimension vs Performance')
+# plt.autoscale(axis='y',tight=True)
 plt.show()
