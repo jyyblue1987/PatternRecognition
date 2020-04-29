@@ -42,55 +42,24 @@ Y_Test = Y_Test.ravel()
 
 # Random Classifier
 dummy_clf = DummyClassifier(strategy="most_frequent")
-dummy_clf.fit(X_Train, Y_Train)
-dummy_score = dummy_clf.score(X_Test, Y_Test)
-print("Random Classifer Score = ", dummy_score)
+train_evaluate_classfier("Random", dummy_clf, X_Train, Y_Train, X_Test, Y_Test)
 
 # ================= Navie Bayes ===============================
 gnb = GaussianNB()
-
-scores = cross_val_score(gnb, X_Train, Y_Train, cv=8)
-print("Navie Bayes Cross Validation Scores = ", scores)
-print("Navie Bayes Cross Validation Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
-
-naive_model = gnb.fit(X_Train, Y_Train) # train
-svm_score = gnb.score(X_Test, Y_Test)
-print("Navie Bayes Final Test Score = ", svm_score)
+train_evaluate_classfier("Navie Bayer", gnb, X_Train, Y_Train, X_Test, Y_Test)
 
 # ================= KNN ===============================
 neigh = KNeighborsClassifier(n_neighbors=4)
-
-scores = cross_val_score(neigh, X_Train, Y_Train, cv=8)
-print("KNN Cross Validation Scores = ", scores)
-print("KNN Cross Validation Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
-
-neigh.fit(X_Train, Y_Train)
-knn_score = neigh.score(X_Test, Y_Test)
-print("KNN Final Test Score = ", svm_score)
+train_evaluate_classfier("KNN", neigh, X_Train, Y_Train, X_Test, Y_Test)
 
 # ================= SVM ===============================
 # Train
 clf = svm.SVC(decision_function_shape='ovr',kernel='linear', C=1)
-scores = cross_val_score(clf, X_Train, Y_Train, cv=8)
-print("SVM Cross Validation Scores = ", scores)
-print("SVM Cross Validation Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
-
-# Predict
-clf.fit(X_Train, Y_Train)
-svm_score = clf.score(X_Test, Y_Test)
-print("SVM Final Test Score = ", svm_score)
+train_evaluate_classfier("SVM", clf, X_Train, Y_Train, X_Test, Y_Test)
 
 # ================= SGD Classfier ===============================
-# Train
 clf = SGDClassifier(loss="hinge", penalty="l2", max_iter=1000)
-scores = cross_val_score(clf, X_Train, Y_Train, cv=8)
-print("SGC Cross Validation Scores = ", scores)
-print("SGC Cross Validation Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
-
-# Predict
-clf.fit(X_Train, Y_Train)
-sgd_score = clf.score(X_Test, Y_Test)
-print("SGD Final Test Score = ", sgd_score)
+train_evaluate_classfier("SGD", clf, X_Train, Y_Train, X_Test, Y_Test)
 
 
 

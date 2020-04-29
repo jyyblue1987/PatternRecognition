@@ -1,10 +1,16 @@
-def getErrorCount(y_pred, y_test):
-    zip_object = zip(y_pred, y_test)
-    error_count = 0
-    for i, j in zip_object:
-        if i != j:
-            error_count += 1
+from sklearn.model_selection import cross_val_score
 
-    print("Test Count = ", len(y_pred), "  Count = ", error_count)
+def train_evaluate_classfier(name, clf, x_train, y_train, x_test, y_test):
+    print("===================== ", name, " =======================")
+    # Train
+    clf.fit(x_train, y_train)
 
-    return error_count
+    # evaulate accuracy on test set
+    score = clf.score(x_test, y_test)
+    print(name, " Final Test Score = ", score)
+
+    # cross validation
+    scores = cross_val_score(clf, x_train, y_train, cv=8)
+    print(name, " Cross Validation Scores = ", scores)
+    print(name, " Cross Validation Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
+    print("")
