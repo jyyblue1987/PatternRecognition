@@ -5,7 +5,6 @@ from sklearn import svm
 from sklearn.linear_model import SGDClassifier
 from sklearn import preprocessing
 from sklearn.decomposition import PCA
-from sklearn.model_selection import cross_val_score
 
 # Load the Pandas libraries with alias 'pd'
 import pandas as pd
@@ -19,15 +18,9 @@ X_Train = train_data[:, 1:]
 Y_Train = train_data[:, [0]]
 Y_Train = Y_Train.ravel()
 
+f_dim = len(X_Train[0])
+
 scaler = preprocessing.StandardScaler().fit(X_Train)
-# X_Train = scaler.transform(X_Train)
-pca_dim = 2
-pca = PCA(n_components=pca_dim)
-pca.fit(X_Train)
-
-print(pca.explained_variance_ratio_)
-
-# X_Train = pca.transform(X_Train)
 
 df = pd.read_csv(r'D_Test1.csv')
 
@@ -36,30 +29,30 @@ test_data = df.to_numpy()
 X_Test = test_data[:, 1:]
 Y_Test = test_data[:, [0]]
 Y_Test = Y_Test.ravel()
+names = ["Random", "Navie Bayer", "KNN", "SVM", "Gradient Descent"]
 
-# X_Test = pca.transform(X_Test)
-# X_Test = scaler.transform(X_Test)
+classifiers = [
+    DummyClassifier(strategy="most_frequent"),
+    GaussianNB(),
+    KNeighborsClassifier(n_neighbors=4),
+    svm.SVC(decision_function_shape='ovr',kernel='linear', C=1),
+    SGDClassifier(loss="hinge", penalty="l2", max_iter=1000),
+]
 
-# Random Classifier
-dummy_clf = DummyClassifier(strategy="most_frequent")
-train_evaluate_classfier("Random", dummy_clf, X_Train, Y_Train, X_Test, Y_Test)
+# iterate over classifiers with standard setting
+for name, clf in zip(names, classifiers):
+    train_evaluate_classfier(name, clf, X_Train, Y_Train, X_Test, Y_Test)
 
-# ================= Navie Bayes ===============================
-gnb = GaussianNB()
-train_evaluate_classfier("Navie Bayer", gnb, X_Train, Y_Train, X_Test, Y_Test)
+# Feature Reduction analysis for SVM classifier
+print("================ Feature Reduction ================")
+for pca_dim in range(2, f_dim):
+    pca = PCA(n_components=pca_dim)
+    pca.fit(X_Train)
 
-# ================= KNN ===============================
-neigh = KNeighborsClassifier(n_neighbors=4)
-train_evaluate_classfier("KNN", neigh, X_Train, Y_Train, X_Test, Y_Test)
+    print("PCA Dimension = ", pca_dim, pca.explained_variance_ratio_)
+    X_Train_Transform = pca.transform(X_Train)
+    X_Test_Transform = pca.transform(X_Test)
 
-# ================= SVM ===============================
-# Train
-clf = svm.SVC(decision_function_shape='ovr',kernel='linear', C=1)
-train_evaluate_classfier("SVM", clf, X_Train, Y_Train, X_Test, Y_Test)
-
-# ================= SGD Classfier ===============================
-clf = SGDClassifier(loss="hinge", penalty="l2", max_iter=1000)
-train_evaluate_classfier("SGD", clf, X_Train, Y_Train, X_Test, Y_Test)
-
-
-
+    # svm
+    clf = classifiers[3]
+    train_evaluate_classfier("SVM: PCA Dim = " + str(pca_dim), clf, X_Train_Transform, Y_Train, X_Test_Transform, Y_Test)
