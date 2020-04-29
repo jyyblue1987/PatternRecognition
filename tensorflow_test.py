@@ -32,42 +32,42 @@ import pandas as pd
 from util import *
 
 # Load Train / Test Data
-df = pd.read_csv(r'D_train_large.csv')
-train_data = df.to_numpy()
-
-X_Train = train_data[1:, 2:17]
-Y_Train = train_data[1:, [1]]
-Y_Train = Y_Train.ravel()
-Y_Train = Y_Train - 1
-
-print(X_Train)
-print(Y_Train)
-
-df = pd.read_csv(r'D_test.csv')
-
-test_data = df.to_numpy()
-
-X_Test = test_data[1:, 2:17]
-Y_Test = test_data[1:, [1]]
-Y_Test = Y_Test.ravel()
-Y_Test = Y_Test - 1
-
-# df = pd.read_csv(r'D_Train1.csv')
+# df = pd.read_csv(r'D_train_large.csv')
 # train_data = df.to_numpy()
 #
-# X_Train = train_data[1:, 1:]
-# Y_Train = train_data[1:, [0]]
+# X_Train = train_data[1:, 2:17]
+# Y_Train = train_data[1:, [1]]
 # Y_Train = Y_Train.ravel()
 # Y_Train = Y_Train - 1
 #
-# df = pd.read_csv(r'D_Test1.csv')
+# print(X_Train)
+# print(Y_Train)
+#
+# df = pd.read_csv(r'D_test.csv')
 #
 # test_data = df.to_numpy()
 #
-# X_Test = test_data[1:, 1:]
-# Y_Test = test_data[1:, [0]]
+# X_Test = test_data[1:, 2:17]
+# Y_Test = test_data[1:, [1]]
 # Y_Test = Y_Test.ravel()
 # Y_Test = Y_Test - 1
+
+df = pd.read_csv(r'D_Train1.csv')
+train_data = df.to_numpy()
+
+X_Train = train_data[:, 1:]
+Y_Train = train_data[:, [0]]
+Y_Train = Y_Train.ravel()
+Y_Train = Y_Train - 1
+
+df = pd.read_csv(r'D_Test1.csv')
+
+test_data = df.to_numpy()
+
+X_Test = test_data[:, 1:]
+Y_Test = test_data[:, [0]]
+Y_Test = Y_Test.ravel()
+Y_Test = Y_Test - 1
 
 X_Train = X_Train.astype('float32') / 100
 X_Test = X_Test.astype('float32') / 100
@@ -79,10 +79,6 @@ label_count = len(train_labels[0])
 
 network1 = models.Sequential()
 network1.add(layers.Dense(32, activation='relu', input_shape=(dim,)))
-network1.add(layers.Dense(32, activation='relu'))
-network1.add(layers.Dense(32, activation='relu'))
-network1.add(layers.Dense(32, activation='relu'))
-network1.add(layers.Dense(16, activation='relu'))
 network1.add(layers.Dense(label_count, activation='softmax'))
 
 network1.compile(optimizer='rmsprop',
@@ -91,6 +87,6 @@ network1.compile(optimizer='rmsprop',
 
 
 
-network1.fit(X_Train, train_labels, epochs=1000, batch_size=32)
+network1.fit(X_Train, train_labels, epochs=50, batch_size=32)
 test_loss, test_acc = network1.evaluate(X_Test, test_labels)
 print('test_acc:', test_acc)

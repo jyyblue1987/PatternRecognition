@@ -1,7 +1,7 @@
 from sklearn.dummy import DummyClassifier
-from sklearn import svm
-from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn import svm
 from sklearn import preprocessing
 from sklearn.decomposition import PCA
 from sklearn.model_selection import cross_val_score
@@ -55,6 +55,17 @@ print("Navie Bayes Cross Validation Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(
 naive_model = gnb.fit(X_Train, Y_Train) # train
 svm_score = gnb.score(X_Test, Y_Test)
 print("Navie Bayes Final Test Score = ", svm_score)
+
+# ================= KNN ===============================
+neigh = KNeighborsClassifier(n_neighbors=4)
+
+scores = cross_val_score(neigh, X_Train, Y_Train, cv=8)
+print("KNN Cross Validation Scores = ", scores)
+print("KNN Cross Validation Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
+
+neigh.fit(X_Train, Y_Train)
+knn_score = neigh.score(X_Test, Y_Test)
+print("KNN Final Test Score = ", svm_score)
 
 # ================= SVM ===============================
 # Train
