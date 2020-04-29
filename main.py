@@ -1,3 +1,4 @@
+from sklearn.dummy import DummyClassifier
 from sklearn import svm
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
@@ -13,8 +14,8 @@ from util import *
 df = pd.read_csv(r'D_Train1.csv')
 train_data = df.to_numpy()
 
-X_Train = train_data[1:, 1:]
-Y_Train = train_data[1:, [0]]
+X_Train = train_data[:, 1:]
+Y_Train = train_data[:, [0]]
 Y_Train = Y_Train.ravel()
 
 scaler = preprocessing.StandardScaler().fit(X_Train)
@@ -31,12 +32,18 @@ df = pd.read_csv(r'D_Test1.csv')
 
 test_data = df.to_numpy()
 
-X_Test = test_data[1:, 1:]
-Y_Test = test_data[1:, [0]]
+X_Test = test_data[:, 1:]
+Y_Test = test_data[:, [0]]
 Y_Test = Y_Test.ravel()
 
 # X_Test = pca.transform(X_Test)
 # X_Test = scaler.transform(X_Test)
+
+# Random Classifier
+dummy_clf = DummyClassifier(strategy="most_frequent")
+dummy_clf.fit(X_Train, Y_Train)
+dummy_score = dummy_clf.score(X_Test, Y_Test)
+print("Random Classifer Score = ", dummy_score)
 
 # ================= Navie Bayes ===============================
 gnb = GaussianNB()
