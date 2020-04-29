@@ -40,8 +40,8 @@ classifiers = [
     DummyClassifier(strategy="stratified"),
     GaussianNB(),
     KNeighborsClassifier(n_neighbors=4),
-    svm.SVC(decision_function_shape='ovr',kernel='linear', C=1),
     SGDClassifier(loss="hinge", penalty="l2", max_iter=1000),
+    svm.SVC(decision_function_shape='ovr',kernel='linear', C=1),
 ]
 
 # iterate over classifiers with standard setting
