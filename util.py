@@ -1,4 +1,5 @@
 from sklearn.model_selection import cross_val_score
+from sklearn.metrics import confusion_matrix
 
 def train_evaluate_classfier(name, clf, x_train, y_train, x_test, y_test):
     print("===================== ", name, " =======================")
@@ -15,11 +16,11 @@ def train_evaluate_classfier(name, clf, x_train, y_train, x_test, y_test):
     print(name, " Cross Validation Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
     print("")
 
+    # confusion matrix
+    y_pred = clf.predict(x_test)
+    cof_mat = confusion_matrix(y_test, y_pred)
+    print(name, " Confusion Matrix: ")
+    print(cof_mat)
+
     return score
 
-def to_percent(y, position):
-  s = str(y / 100)
-  if rcParams['text.usetex'] is True:
-    return s + r'$\%$'
-  else:
-    return s + '%'

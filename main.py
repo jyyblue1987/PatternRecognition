@@ -37,7 +37,7 @@ Y_Test = Y_Test.ravel()
 names = ["Random", "Navie Bayer", "KNN", "SVM", "Gradient Descent"]
 
 classifiers = [
-    DummyClassifier(strategy="most_frequent"),
+    DummyClassifier(strategy="stratified"),
     GaussianNB(),
     KNeighborsClassifier(n_neighbors=4),
     svm.SVC(decision_function_shape='ovr',kernel='linear', C=1),
@@ -77,7 +77,9 @@ for pca_dim in range(2, f_dim):
 x_pos = np.arange(len(score_list))
 plt.bar(x_pos, score_list, align='center', alpha=0.5)
 plt.gca().yaxis.set_major_formatter(mtick.PercentFormatter())
+plt.xlabel('Dimension')
 plt.ylabel('Accuracy')
+plt.xticks(x_pos, range(2, f_dim))
 plt.title('PCA Dimension vs Performance')
 # plt.autoscale(axis='y',tight=True)
 plt.show()
