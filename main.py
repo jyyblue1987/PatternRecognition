@@ -41,9 +41,9 @@ Y_Test = Y_Test.ravel()
 # ================= Navie Bayes ===============================
 gnb = GaussianNB()
 
-scores = cross_val_score(gnb, X_Train, Y_Train, cv=5)
-print("Navid Bayes Cross Validation Scores = ", scores)
-print("Navid Bayes Cross Validation Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
+scores = cross_val_score(gnb, X_Train, Y_Train, cv=8)
+print("Navie Bayes Cross Validation Scores = ", scores)
+print("Navie Bayes Cross Validation Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
 
 naive_model = gnb.fit(X_Train, Y_Train) # train
 svm_score = gnb.score(X_Test, Y_Test)
@@ -51,8 +51,8 @@ print("Navie Bayes Final Test Score = ", svm_score)
 
 # ================= SVM ===============================
 # Train
-clf = svm.SVC(decision_function_shape='ovr')
-scores = cross_val_score(clf, X_Train, Y_Train, cv=5)
+clf = svm.SVC(decision_function_shape='ovr',kernel='linear', C=1)
+scores = cross_val_score(clf, X_Train, Y_Train, cv=8)
 print("SVM Cross Validation Scores = ", scores)
 print("SVM Cross Validation Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
 
