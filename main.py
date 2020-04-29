@@ -2,6 +2,7 @@ from sklearn.dummy import DummyClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import svm
+from sklearn.linear_model import SGDClassifier
 from sklearn import preprocessing
 from sklearn.decomposition import PCA
 from sklearn.model_selection import cross_val_score
@@ -79,7 +80,17 @@ clf.fit(X_Train, Y_Train)
 svm_score = clf.score(X_Test, Y_Test)
 print("SVM Final Test Score = ", svm_score)
 
+# ================= SGD Classfier ===============================
+# Train
+clf = SGDClassifier(loss="hinge", penalty="l2", max_iter=1000)
+scores = cross_val_score(clf, X_Train, Y_Train, cv=8)
+print("SGC Cross Validation Scores = ", scores)
+print("SGC Cross Validation Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
 
+# Predict
+clf.fit(X_Train, Y_Train)
+sgd_score = clf.score(X_Test, Y_Test)
+print("SGD Final Test Score = ", sgd_score)
 
 
 
