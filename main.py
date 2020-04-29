@@ -6,6 +6,10 @@ from sklearn.linear_model import SGDClassifier
 from sklearn import preprocessing
 from sklearn.decomposition import PCA
 
+import numpy as np
+import matplotlib.pyplot as plt
+
+
 # Load the Pandas libraries with alias 'pd'
 import pandas as pd
 from util import *
@@ -21,6 +25,7 @@ Y_Train = Y_Train.ravel()
 f_dim = len(X_Train[0])
 
 scaler = preprocessing.StandardScaler().fit(X_Train)
+
 
 df = pd.read_csv(r'D_Test1.csv')
 
@@ -40,11 +45,21 @@ classifiers = [
 ]
 
 # iterate over classifiers with standard setting
+score_list = []
 for name, clf in zip(names, classifiers):
-    train_evaluate_classfier(name, clf, X_Train, Y_Train, X_Test, Y_Test)
+    score = train_evaluate_classfier(name, clf, X_Train, Y_Train, X_Test, Y_Test)
+    score_list.append(score * 100)
+
+x_pos = np.arange(len(names));
+ax = plt.bar(x_pos, score_list, align='center', alpha=0.5)
+plt.xticks(x_pos, names)
+plt.ylabel('Accuracy')
+plt.title('Classifiers Performance')
+plt.show()
 
 # Feature Reduction analysis for SVM classifier
 print("================ Feature Reduction ================")
+score_list = []
 for pca_dim in range(2, f_dim):
     pca = PCA(n_components=pca_dim)
     pca.fit(X_Train)
@@ -55,4 +70,11 @@ for pca_dim in range(2, f_dim):
 
     # svm
     clf = classifiers[3]
-    train_evaluate_classfier("SVM: PCA Dim = " + str(pca_dim), clf, X_Train_Transform, Y_Train, X_Test_Transform, Y_Test)
+    score = train_evaluate_classfier("SVM: PCA Dim = " + str(pca_dim), clf, X_Train_Transform, Y_Train, X_Test_Transform, Y_Test)
+    score_list.append(score * 100)
+
+x_pos = np.arange(len(score_list));
+ax = plt.bar(x_pos, score_list, align='center', alpha=0.5)
+plt.ylabel('Accuracy')
+plt.title('PCA Dimension vs Performance')
+plt.show()

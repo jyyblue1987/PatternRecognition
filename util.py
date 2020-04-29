@@ -14,3 +14,5 @@ def train_evaluate_classfier(name, clf, x_train, y_train, x_test, y_test):
     print(name, " Cross Validation Scores = ", scores)
     print(name, " Cross Validation Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
     print("")
+
+    return score
